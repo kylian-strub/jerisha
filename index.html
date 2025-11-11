@@ -1,20 +1,64 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>A tes 21 ans</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Une lettre d'amour, simple et vraie. Pour toi." />
+  <meta name="theme-color" content="#C2185B" />
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <div class="letter">
-    <h1>Pour toi ❤️</h1>
-    <p>
-      Depuis que tu es entré(e) dans ma vie, tout est plus doux, plus simple, plus vrai.  
-      Chaque sourire, chaque regard me rappelle à quel point je tiens à toi.  
-      Peu importe le temps ou la distance, mon cœur, lui, reste près du tien.
-    </p>
-    <p class="signature">— Ton admirateur secret 💌</p>
+  <!-- Arrière-plan décoratif -->
+  <div class="bg" aria-hidden="true"></div>
+  <div class="hearts" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span>
   </div>
+
+  <!-- BOUTON D’ENTRÉE -->
+  <div id="intro-screen" class="intro-screen">
+    <button id="open-btn" class="open-btn">🎁 Ouvrir le cadeau</button>
+  </div>
+
+  <!-- CONTENU PRINCIPAL (lettre cachée au début) -->
+  <main class="page hidden" id="letter-content">
+    <article class="letter" aria-label="Lettre d'amour">
+      <header class="letter__header">
+        <h1 class="letter__title">À tes 21 ans ❤️</h1>
+        <p class="letter__subtitle">oh la cougar !</p>
+      </header>
+
+      <section class="letter__body">
+        <p><strong>J</strong>e t’aime, ma chérie.</p>
+        <p><strong>E</strong>n effet, depuis que tu es dans ma vie, celle-ci est incroyable, et tu ne cesses de combler mon cœur.</p>
+        <p><strong>R</strong>are sont les fois où je ne pense pas à toi, tu es, en réalité, tout le temps dans ma tête.</p>
+        <p><strong>I</strong>ndescriptible est mon amour pour toi, et il ne cesse de grandir chaque jour à tes côtés.</p>
+        <p><strong>S</strong>incèrement, j’ai voulu te faire un cadeau qui ait du sens pour tes 21 ans. Quelque chose qui te rappellera à quel point tu comptes pour moi. Ce n’est pas un simple cadeau comme les autres, c’est une promesse, un symbole de ce que je ressens pour toi et de la raison pour laquelle je suis dans ta vie aujourd’hui.</p>
+        <p><strong>H</strong>onêtement, ce cadeau est simple en apparence, mais plein de sens. Il représente une promesse, celle de ce que j’attends le plus au monde. Je ne t’en dis pas plus et te laisse le découvrir par toi-même.</p>
+        <p><strong>A</strong> toi, ma chérie que j’aime de tout mon cœur, et que je ne cesserai d’aimer toute ma vie. ❤️</p>
+
+        <br />
+        <p class="letter__accent">Tu peux ouvrir le cadeau maintenant !</p>
+      </section>
+    </article>
+  </main>
+
+  <script>
+    const btn = document.getElementById('open-btn');
+    const intro = document.getElementById('intro-screen');
+    const letter = document.getElementById('letter-content');
+
+    btn.addEventListener('click', () => {
+      intro.classList.add('fade-out');
+      setTimeout(() => {
+        intro.style.display = 'none';
+        letter.classList.remove('hidden');
+        letter.classList.add('fade-in');
+      }, 800);
+    });
+  </script>
 </body>
 </html>
