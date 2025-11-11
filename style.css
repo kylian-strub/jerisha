@@ -1,40 +1,258 @@
-/* Arrière-plan doux et texte centré */
-body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #ffd1dc, #fff0f5);
-  font-family: 'Georgia', serif;
-  color: #4b2e39;
+/* =========================
+   Design system de base
+   ========================= */
+:root{
+  --rose-100:#FFEBF0;
+  --rose-200:#FFD6E1;
+  --rose-400:#FF8AB0;
+  --rose-600:#E35180;
+  --rose-700:#C2185B;
+  --ink:#3B2E3A;
+  --ink-weak:#5D4A57;
+  --paper:#FFFFFFCC;      /* verre translucide */
+  --shadow:0 10px 24px rgba(0,0,0,.18);
+  --radius:16px;
+  --maxw:720px;
 }
 
-/* Bloc de la lettre */
-.letter {
-  max-width: 600px;
+/* Reset minimal et lisibilité */
+*{box-sizing:border-box}
+html,body{height:100%}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  color:var(--ink);
+  background:#fff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* =========================
+   Arrière-plan vivant
+   ========================= */
+.bg{
+  position:fixed; inset:0;
+  background:
+    radial-gradient(1200px 1200px at 10% 10%, var(--rose-100), transparent 60%),
+    radial-gradient(1000px 1000px at 90% 20%, var(--rose-200), transparent 70%),
+    radial-gradient(1000px 1000px at 30% 90%, #fff, transparent 60%),
+    linear-gradient(135deg, #fff 0%, var(--rose-100) 60%, var(--rose-200) 100%);
+  filter:saturate(1.08) contrast(1.02);
+  z-index:-2;
+  animation:bgShift 22s ease-in-out infinite alternate;
+}
+@keyframes bgShift{
+  0%{ filter:hue-rotate(0deg) saturate(1.08)}
+  100%{ filter:hue-rotate(-10deg) saturate(1.15)}
+}
+
+/* =========================
+   Cœurs flottants (CSS only)
+   ========================= */
+.hearts{
+  position:fixed; inset:0; pointer-events:none; z-index:-1;
+  overflow:hidden;
+}
+.hearts span{
+  position:absolute;
+  left:var(--x,50%);
+  bottom:-10vh;
+  width:24px; height:24px;
+  background:
+    radial-gradient(circle at 30% 30%, #fff8 0 45%, transparent 46%),
+    conic-gradient(from -45deg at 50% 60%, var(--rose-400), var(--rose-600));
+  /* cœur via clip-path */
+  clip-path: polygon(50% 15%, 61% 0, 75% 0, 88% 8%, 95% 22%, 95% 36%, 90% 50%,
+                     50% 90%, 10% 50%, 5% 36%, 5% 22%, 12% 8%, 25% 0, 39% 0);
+  opacity:.85;
+  transform:translateY(0) scale(var(--s,1)) rotate(var(--r,0deg));
+  animation:floatUp var(--dur,18s) linear infinite;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,.15));
+}
+@keyframes floatUp{
+  0%{ transform:translateY(10vh) translateX(0) scale(var(--s,1)) rotate(var(--r,0))}
+  100%{ transform:translateY(-120vh) translateX(var(--drift, 6vw)) scale(var(--s,1)) rotate(calc(var(--r,0) + 40deg))}
+}
+
+/* Disposition aléatoire (12 cœurs) */
+.hearts span:nth-child(1){ --x:12%; --s:1.0; --r:-8deg;  --dur:20s; --drift:-8vw }
+.hearts span:nth-child(2){ --x:24%; --s:0.9; --r:4deg;   --dur:18s; --drift:6vw }
+.hearts span:nth-child(3){ --x:36%; --s:1.2; --r:-3deg;  --dur:22s; --drift:-4vw }
+.hearts span:nth-child(4){ --x:48%; --s:0.8; --r:7deg;   --dur:19s; --drift:10vw }
+.hearts span:nth-child(5){ --x:60%; --s:1.1; --r:-5deg;  --dur:23s; --drift:-6vw }
+.hearts span:nth-child(6){ --x:72%; --s:0.85;--r:2deg;   --dur:21s; --drift:5vw }
+.hearts span:nth-child(7){ --x:84%; --s:1.15;--r:-6deg;  --dur:24s; --drift:-10vw }
+.hearts span:nth-child(8){ --x:18%; --s:0.95;--r:3deg;   --dur:20s; --drift:7vw }
+.hearts span:nth-child(9){ --x:30%; --s:0.75;--r:-2deg;  --dur:26s; --drift:-5vw }
+.hearts span:nth-child(10){--x:42%; --s:1.05;--r:5deg;   --dur:22s; --drift:9vw }
+.hearts span:nth-child(11){--x:66%; --s:0.9; --r:-4deg;  --dur:25s; --drift:-7vw }
+.hearts span:nth-child(12){--x:78%; --s:1.25;--r:1deg;   --dur:27s; --drift:8vw }
+
+/* Respecte les préférences utilisateur */
+@media (prefers-reduced-motion: reduce){
+  .bg{ animation:none }
+  .hearts span{ animation:none; opacity:.2 }
+}
+
+/* =========================
+   Mise en page de la lettre
+   ========================= */
+.page{
+  min-height:100dvh;
+  display:grid;
+  place-items:center;
+  padding:6vh 4vw;
+}
+
+.letter{
+  width:min(100%, var(--maxw));
+  background:var(--paper);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:clamp(20px, 4vw, 48px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border:1px solid rgba(255,255,255,.6);
+}
+
+.letter__header{ text-align:center; margin-bottom:1.25rem }
+.letter__title{
+  margin:0 0 .25rem 0;
+  font-size:clamp(1.8rem, 3.2vw, 2.6rem);
+  line-height:1.1;
+  color:var(--rose-700);
+  letter-spacing:.2px;
+}
+.letter__subtitle{
+  margin:0;
+  color:var(--ink-weak);
+  font-size:clamp(1rem, 1.6vw, 1.1rem);
+}
+
+.letter__body{
+  margin-top:1rem;
+  font-size:clamp(1.05rem, 1.55vw, 1.2rem);
+  line-height:1.75;
+}
+.letter__body p{ margin:0 0 1.05rem 0 }
+.letter__accent{
+  margin-top:1.2rem;
+  font-weight:700;
+  color:var(--rose-700);
   text-align: center;
-  background: #ffffffb3;
-  padding: 40px;
+}
+
+.letter__footer{
+  margin-top:1.5rem;
+  text-align:center;
+  color:var(--ink-weak);
+}
+.signature{
+  margin:.5rem 0 0 0;
+  font-style:italic;
+  font-size:1.05em;
+}
+.ps{
+  margin:.35rem 0 0 0;
+  opacity:.9;
+}
+
+/* Lien d’accès rapide (reste discret) */
+.skip-to-letter{
+  position:fixed; left:-9999px; top:auto;
+}
+.skip-to-letter:focus{
+  left:16px; top:16px; background:#fff;
+  padding:8px 12px; border-radius:8px; box-shadow:var(--shadow);
+  color:var(--rose-700); text-decoration:none;
+}
+
+/* =========================
+   Impression
+   ========================= */
+@media print{
+  body{ background:#fff }
+  .bg,.hearts,.skip-to-letter{ display:none !important }
+  .letter{
+    box-shadow:none; border:0; backdrop-filter:none; -webkit-backdrop-filter:none;
+    width:100%;
+  }
+}
+
+
+/* =========================
+   Mise en valeur des initiales (J-E-R-I-S-H-A)
+   ========================= */
+.letter__body strong {
+  font-size: 2.4rem;          /* grande taille */
+  color: #e63946;             /* rouge doux */
+  font-family: 'Georgia', serif;
+  font-weight: 700;
+  vertical-align: middle;
+  letter-spacing: 2px;
+  text-shadow: 1px 1px 4px rgba(230, 57, 70, 0.2);
+  margin-right: 2px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Petit effet au survol pour le romantisme */
+.letter__body strong:hover {
+  transform: scale(1.15);
+  color: #c2185b;
+}
+
+
+
+/* =============== INTRO SCREEN =============== */
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #ffd6e1, #fff0f5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  animation: fadeIn 1s ease;
+}
+
+.open-btn {
+  font-size: 1.5rem;
+  background: #e63946;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  backdrop-filter: blur(4px);
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.open-btn:hover {
+  transform: scale(1.1);
+  background: #c2185b;
 }
 
-/* Titre et texte */
-h1 {
-  font-size: 2em;
-  color: #e63946;
+/* =============== ANIMATIONS =============== */
+.hidden {
+  display: none;
+  opacity: 0;
 }
 
-p {
-  font-size: 1.2em;
-  line-height: 1.6;
+.fade-in {
+  display: block;
+  animation: fadeIn 1.5s ease forwards;
 }
 
-/* Signature */
-.signature {
-  margin-top: 20px;
-  font-style: italic;
-  color: #6a1b4d;
+.fade-out {
+  animation: fadeOut 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
